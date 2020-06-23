@@ -32,7 +32,6 @@ class oracle implements db
 
 /**
  * 工厂模式: 通过工厂或者类创建对象
- *
  * */
 
 class factory{
