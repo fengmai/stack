@@ -2,6 +2,14 @@
 
 class config implements \ArrayAccess{
 
+    protected $path ;
+    protected $configs = [];
+
+    function __construct($path)
+    {
+        $this->path = $path;
+    }
+
     /**
      * Whether a offset exists
      * @link https://php.net/manual/en/arrayaccess.offsetexists.php
@@ -30,6 +38,12 @@ class config implements \ArrayAccess{
      */
     public function offsetGet($offset)
     {
+        if (empty($this->configs[$offset])){
+            $filePath = $this->path.'/'.$offset.'.php';
+            $config = require_once $filePath;
+            $this->configs[$offset] = $config;
+        }
+        return $this->configs[$offset];
         // TODO: Implement offsetGet() method.
     }
 

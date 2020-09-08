@@ -3,7 +3,7 @@
  * Redis 操作，支持 Master/Slave 的负载集群
  *
  */
-class RedisCluster{
+class RedisClusters{
     // 是否使用 M/S 的读写集群方案
     private $_isUseCluster = false;
     // Slave 句柄标记
@@ -21,6 +21,18 @@ class RedisCluster{
     public function __construct($isUseCluster=false){
         $this->_isUseCluster = $isUseCluster;
     }
+    public  function auth($passWord, $isMaster=true){
+        if($isMaster){
+            $ret = $this->_linkHandle['master']->auth('ceshi123');
+        }else{
+            // 多个 Slave 连接
+            $ret = $this->_linkHandle['slave'][$this->_sn]->auth('ceshi123');
+            ++$this->_sn;
+        }
+        return $ret;
+    }
+
+
     /**
      * 连接服务器,注意：这里使用长连接，提高效率，但不会自动关闭
      *
@@ -280,4 +292,4 @@ class RedisCluster{
     public function exec(){
         return $this->getRedis()->exec();
     }
-}
+}// End Class
